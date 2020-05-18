@@ -6,4 +6,7 @@ provider "aws" {
 
 module "iam" {
   source = "./terraform_modules/iam/"
+
+  account_alias = "codyacademic2020"
+  administrator_users = ["gustavo.fernandes"]
 }
