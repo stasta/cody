@@ -32,11 +32,11 @@ module "network" {
   source = "./terraform_modules/network"
 
   vpc_region = "${var.aws_region}"
-  whitelisted_ips = [ "" ]
 }
 
 module "security" {
   source = "./terraform_modules/security"
 
-  vpc_region = "${var.aws_region}"
+  vpc_id = "${module.network.vpc}"
+  whitelisted_ssh_ips = [ "50.68.30.198/32" ]
 }

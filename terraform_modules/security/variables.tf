@@ -1,1 +1,3 @@
-variable "vpc_region" { type = "string" }
+variable "vpc_id" { type = "string" }
+
+variable "whitelisted_ssh_ips" { type = "list" }

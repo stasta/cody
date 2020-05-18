@@ -9,6 +9,3 @@ variable "subnet_cidr_block" {
     secondary_public = "10.0.2.0/24"
   }
 }
-
-variable "whitelisted_ips" { type = "list" }
-
