@@ -36,7 +36,7 @@ resource "aws_autoscaling_group" "asg_web" {
   max_size              = "${var.asg_web_max_size}"
   desired_capacity      = "${var.asg_web_des_size}"
 
-  vpc_zone_identifier   = ["${var.asg_web_azs}"]
+  vpc_zone_identifier   = ["${var.subnets_ids}"]
 
   target_group_arns = [ "${aws_lb_target_group.web-target-group.arn}"]
 
@@ -60,9 +60,7 @@ resource "aws_lb" "web_alb" {
   security_groups = [
     "${var.lc_web_security_groups}"]
   // TODO fix with correct SGs
-  subnets = [
-    "${var.alb_subnets}"]
-  // TODO get with better name
+  subnets = ["${var.subnets_ids}"]
 
   enable_deletion_protection = true
 
