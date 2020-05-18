@@ -21,6 +21,8 @@ resource "aws_launch_configuration" "lc_web" {
   security_groups             = ["${var.lc_web_security_groups}"]
   associate_public_ip_address = true
 
+  user_data = "${file("${path.module}/bootstrap/setup-webserver.sh")}"
+
   lifecycle {
     create_before_destroy = true
   }
