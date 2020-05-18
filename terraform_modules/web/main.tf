@@ -79,13 +79,15 @@ resource "aws_lb" "web_alb" {
 }
 
 resource "aws_lb_target_group" "web-target-group" {
-  name        = "tf-example-lb-tg" // TODO get with better name
+  name_prefix = "webtg-"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = "${var.vpc_id}"
+
+  deregistration_delay = 30
 }
 
-resource "aws_lb_listener" "front_end" {
+resource "aws_lb_listener" "web-listener-target-group" {
   load_balancer_arn = "${aws_lb.web_alb.arn}"
   port              = "80"
   protocol          = "HTTP"
