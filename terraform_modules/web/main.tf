@@ -57,9 +57,8 @@ resource "aws_lb" "web_alb" {
   name_prefix = "web-"
   internal = false
   load_balancer_type = "application"
-  security_groups = [
-    "${var.lc_web_security_groups}"]
-  // TODO fix with correct SGs
+
+  security_groups = ["${var.alb_sg}"]
   subnets = ["${var.subnets_ids}"]
 
   enable_deletion_protection = true

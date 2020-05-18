@@ -52,4 +52,5 @@ module "web" {
   asg_web_des_size = 1
 
   lc_web_security_groups = ["${module.security.ssh-sg}", "${module.security.web-sg}"]
+  alb_sg = "${module.security.web-lb-sg}"
 }

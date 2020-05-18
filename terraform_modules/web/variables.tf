@@ -12,3 +12,4 @@ variable "asg_web_max_size" { default = 0 }
 variable "asg_web_des_size" { default = 0 }
 
 variable "alb_name" { default = "web_alb" }
+variable "alb_sg" { type = "string" }
