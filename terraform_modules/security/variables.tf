@@ -1,0 +1,1 @@
+variable "vpc_region" { type = "string" }

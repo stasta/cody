@@ -34,3 +34,9 @@ module "network" {
   vpc_region = "${var.aws_region}"
   whitelisted_ips = [ "" ]
 }
+
+module "security" {
+  source = "./terraform_modules/security"
+
+  vpc_region = "${var.aws_region}"
+}
