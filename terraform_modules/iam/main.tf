@@ -1,3 +1,13 @@
+resource "aws_iam_account_password_policy" "password_policy" {
+  allow_users_to_change_password = true
+  require_lowercase_characters = true
+  require_uppercase_characters = true
+  require_numbers = true
+  require_symbols = true
+  password_reuse_prevention = 10
+  minimum_password_length = 12
+}
+
 resource "aws_iam_account_alias" "account_alias" {
   account_alias = "${var.account_alias}"
 }
