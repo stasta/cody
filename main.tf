@@ -40,3 +40,14 @@ module "security" {
   vpc_id = "${module.network.vpc}"
   whitelisted_ssh_ips = [ "50.68.30.198/32" ]
 }
+
+module "web" {
+  source = "./terraform_modules/web"
+
+  asg_web_min_size = 0
+  asg_web_max_size = 1
+  asg_web_des_size = 1
+
+  asg_web_azs = ["${module.network.primary_public_subnet}", "${module.network.secondary_public_subnet}"]
+  lc_web_security_groups = ["${module.security.ssh-sg}", "${module.security.web-sg}"]
+}
