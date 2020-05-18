@@ -48,6 +48,9 @@ module "web" {
   asg_web_max_size = 1
   asg_web_des_size = 1
 
+  //TODO rename this var to subnets
   asg_web_azs = ["${module.network.primary_public_subnet}", "${module.network.secondary_public_subnet}"]
   lc_web_security_groups = ["${module.security.ssh-sg}", "${module.security.web-sg}"]
+  alb_subnets = ["${module.network.primary_public_subnet}", "${module.network.secondary_public_subnet}"]
+  vpc_id = "${module.network.vpc}"
 }

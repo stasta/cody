@@ -38,6 +38,8 @@ resource "aws_autoscaling_group" "asg_web" {
 
   vpc_zone_identifier   = ["${var.asg_web_azs}"]
 
+  target_group_arns = [ "${aws_lb_target_group.web-target-group.arn}"]
+
   tags = [
     {
       key                 = "Name"
@@ -48,5 +50,48 @@ resource "aws_autoscaling_group" "asg_web" {
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_lb" "web_alb" {
+  name_prefix = "webalb" //TODO get better name prefix (limit 6 chars)
+  internal = false
+  load_balancer_type = "application"
+  security_groups = [
+    "${var.lc_web_security_groups}"]
+  // TODO fix with correct SGs
+  subnets = [
+    "${var.alb_subnets}"]
+  // TODO get with better name
+
+  enable_deletion_protection = true
+
+  // TODO create s3 logs bucket
+  /*access_logs {
+    bucket  = "${aws_s3_bucket.lb_logs.bucket}"
+    prefix  = "test-lb"
+    enabled = true
+  }*/
+
+  tags = {
+    Name = "${var.alb_name}"
+  }
+}
+
+resource "aws_lb_target_group" "web-target-group" {
+  name        = "tf-example-lb-tg" // TODO get with better name
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = "${var.vpc_id}"
+}
+
+resource "aws_lb_listener" "front_end" {
+  load_balancer_arn = "${aws_lb.web_alb.arn}"
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.web-target-group.arn}"
   }
 }
