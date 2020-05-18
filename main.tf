@@ -31,5 +31,6 @@ module "s3" {
 module "network" {
   source = "./terraform_modules/network"
 
+  vpc_region = "${var.aws_region}"
   whitelisted_ips = [ "" ]
 }
