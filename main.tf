@@ -27,3 +27,9 @@ module "s3" {
 
   account_alias = "${module.iam.account_alias}"
 }
+
+module "network" {
+  source = "./terraform_modules/network"
+
+  whitelisted_ips = [ "" ]
+}
