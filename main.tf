@@ -4,11 +4,16 @@ provider "aws" {
   region  = "${var.aws_region}"
 }
 
-//terraform {
-//  backend "s3" {
-//    bucket = "${module.s3.remote-state-bucket-name}"
-//  }
-//}
+# Create the S3 bucket first before setting the backend.
+# See the ./terraform_modules/remote-state/README.md.
+terraform {
+  backend "s3" {
+    bucket = "codyacademic2020-terraform-state"
+    key = "tf-state-codyacademic2020"
+    region = "us-east-1"
+    encrypt = true
+  }
+}
 
 module "iam" {
   source = "./terraform_modules/iam/"
@@ -18,7 +23,7 @@ module "iam" {
 }
 
 module "s3" {
-  source = "./terraform_modules/s3/"
+  source = "./terraform_modules/remote-state/"
 
   account_alias = "${module.iam.account_alias}"
 }
