@@ -1,3 +1,7 @@
+resource "aws_iam_account_alias" "account_alias" {
+  account_alias = "${var.account_alias}"
+}
+
 resource "aws_iam_group" "administrators" {
   name = "administrators"
 }
