@@ -54,7 +54,7 @@ resource "aws_autoscaling_group" "asg_web" {
 }
 
 resource "aws_lb" "web_alb" {
-  name_prefix = "webalb" //TODO get better name prefix (limit 6 chars)
+  name_prefix = "web-"
   internal = false
   load_balancer_type = "application"
   security_groups = [
