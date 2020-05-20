@@ -7,7 +7,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket = "codyacademic2020-terraform-state"
-    key = "tf-state-codyacademic2020"
+    key = "wordpress/tf.state"
     region = "us-east-1"
     encrypt = true
   }
