@@ -13,13 +13,6 @@ terraform {
   }
 }
 
-//TODO remove this
-//module "s3" {
-//  source = "./terraform_modules/remote-state/"
-//
-//  account_alias = "${module.iam.account_alias}"
-//}
-
 module "network" {
   source = "./terraform_modules/network"
 
