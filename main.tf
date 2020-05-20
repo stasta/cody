@@ -39,3 +39,11 @@ module "web" {
   lc_web_security_groups = ["${module.security.ssh-sg}", "${module.security.web-sg}"]
   alb_sg = "${module.security.web-lb-sg}"
 }
+
+module "efs" {
+  source = "./terraform_modules/efs"
+
+  subnet1 = "${module.network.primary_public_subnet}"
+  subnet2 = "${module.network.secondary_public_subnet}"
+  web_server_sg = "${module.security.web-sg}"
+}
