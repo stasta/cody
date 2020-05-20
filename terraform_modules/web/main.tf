@@ -52,6 +52,27 @@ resource "aws_autoscaling_group" "asg_web" {
     create_before_destroy = true
   }
 }
+// TODO figure out bucket policy
+/*resource "aws_s3_bucket" "web_alb-logs-bucket" {
+  bucket_prefix = "web-alb-access-logs"
+  acl = "private"
+
+  policy = <<EOF
+{
+"Version": "2012-10-17,
+“Statement”: [
+{
+“Effect”: “Allow”,
+“Principal”: {
+“AWS”: “arn:aws:iam::783225319266:root”
+},
+“Action”: “s3:PutObject”,
+“Resource”: “arn:aws:s3:::elb-log.davidwzhang.com*//*”
+}
+]
+}
+EOF
+}*/
 
 resource "aws_lb" "web_alb" {
   name_prefix = "web-"
@@ -64,11 +85,11 @@ resource "aws_lb" "web_alb" {
   enable_deletion_protection = true
 
   // TODO create s3 logs bucket
-  /*access_logs {
-    bucket  = "${aws_s3_bucket.lb_logs.bucket}"
-    prefix  = "test-lb"
-    enabled = true
-  }*/
+//  access_logs {
+//    bucket  = "${aws_s3_bucket.web_alb-logs-bucket.bucket}"
+//    prefix  = "access_logs" // TODO use an application tag?
+//    enabled = true
+//  }
 
   tags = {
     Name = "${var.alb_name}"
