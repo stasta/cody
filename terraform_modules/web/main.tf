@@ -82,7 +82,7 @@ resource "aws_lb" "web_alb" {
   security_groups = ["${var.alb_sg}"]
   subnets = ["${var.subnets_ids}"]
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   // TODO create s3 logs bucket
 //  access_logs {
