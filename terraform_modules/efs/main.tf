@@ -18,6 +18,7 @@ resource "aws_efs_mount_target" "efs_mount_targetB" {
 
 //TODO allow the incoming web_sg
 resource "aws_security_group" "efs_sg" {
+  vpc_id = "${var.vpc_id}"
   name_prefix = "efs-sg-"
   description = "Allows EFS access to the Web servers"
 
