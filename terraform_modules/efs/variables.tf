@@ -2,11 +2,11 @@ variable "vpc_id" {
   type = "string"
 }
 
-variable "subnet1" {
+variable "primary_subnet" {
   type = "string"
 }
 
-variable "subnet2" {
+variable "secondary_subnet" {
   type = "string"
 }
 
