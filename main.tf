@@ -51,4 +51,7 @@ module "efs" {
 
 module "rds" {
   source = "./terraform_modules/rds"
+
+  primary_subnet = "${module.network.primary_public_subnet}"
+  secondary_subnet = "${module.network.secondary_public_subnet}"
 }
