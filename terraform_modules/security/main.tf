@@ -1,3 +1,8 @@
+resource "aws_key_pair" "ec2_key_pair" {
+  public_key = "${file("${var.keypair_public_key_file}")}"
+  key_name_prefix = "cody_" //TODO
+}
+
 resource "aws_security_group" "web-lb" {
   vpc_id = "${var.vpc_id}"
   name_prefix = "web-lb-access-"

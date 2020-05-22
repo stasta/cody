@@ -29,6 +29,8 @@ module "security" {
 module "web" {
   source = "./terraform_modules/web"
 
+  keypair_name="${module.security.keypair_name}"
+
   vpc_id = "${module.network.vpc}"
   subnets_ids = ["${module.network.primary_public_subnet}", "${module.network.secondary_public_subnet}"]
 

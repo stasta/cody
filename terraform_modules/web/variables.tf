@@ -13,3 +13,5 @@ variable "asg_web_des_size" { default = 0 }
 
 variable "alb_name" { default = "web_alb" }
 variable "alb_sg" { type = "string" }
+
+variable "keypair_name" { type = "string"}

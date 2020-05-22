@@ -23,6 +23,8 @@ resource "aws_launch_configuration" "lc_web" {
 
   user_data = "${file("${path.module}/bootstrap/setup-webserver.sh")}"
 
+  key_name = "${var.keypair_name}"
+
   lifecycle {
     create_before_destroy = true
   }
