@@ -14,10 +14,32 @@ resource "aws_db_instance" "db_instance" {
   db_subnet_group_name = "${aws_db_subnet_group.db_subnet_group.name}"
   publicly_accessible = true
 
+  vpc_security_group_ids = [ "${aws_security_group.db_security_group.id}" ]
+
   skip_final_snapshot  = true
   final_snapshot_identifier = "ignore"
 }
 
 resource "aws_db_subnet_group" "db_subnet_group" {
   subnet_ids = ["${var.primary_subnet}", "${var.secondary_subnet}"]
+}
+
+resource "aws_security_group" "db_security_group" {
+  name_prefix = "db-sg-"
+  description = "Allows traffic on DB port"
+  vpc_id = "${var.vpc_id}"
+
+  ingress {
+    from_port = 3306
+    protocol = "TCP"
+    to_port = 3306
+    security_groups = [ "${var.web_sg}"]
+  }
+
+  egress {
+    from_port = 3306
+    protocol = "TCP"
+    to_port = 3306
+    cidr_blocks = [ "0.0.0.0/0" ]
+  }
 }

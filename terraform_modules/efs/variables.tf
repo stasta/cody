@@ -10,6 +10,6 @@ variable "secondary_subnet" {
   type = "string"
 }
 
-variable "web_server_sg" {
+variable "web_sg" {
   type = "string"
 }
