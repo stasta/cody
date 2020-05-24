@@ -35,8 +35,8 @@ module "web" {
   subnets_ids = ["${module.network.primary_public_subnet}", "${module.network.secondary_public_subnet}"]
 
   asg_web_min_size = 0
-  asg_web_max_size = 1
-  asg_web_des_size = 1
+  asg_web_max_size = 0
+  asg_web_des_size = 0
 
   lc_web_security_groups = ["${module.security.ssh-sg}", "${module.security.web-sg}"]
   alb_sg = "${module.security.web-lb-sg}"
@@ -58,4 +58,25 @@ module "rds" {
   primary_subnet = "${module.network.primary_public_subnet}"
   secondary_subnet = "${module.network.secondary_public_subnet}"
   web_sg = "${module.security.web-sg}"
+}
+
+module "web-ecs" {
+  source = "./terraform_modules/web-ecs"
+
+
+  primary_subnet = "${module.network.primary_public_subnet}"
+  secondary_subnet = "${module.network.secondary_public_subnet}"
+  file_system_id ="${module.efs.file_system}"
+
+  ecs_cluster_name = "test-cluster"
+  ecs_key_pair_name = "${module.security.keypair_name}"
+  web_sg = "${module.security.web-sg}"
+  ssh_sg = "${module.security.ssh-sg}"
+
+  max_instance_size = 1
+  min_instance_size = 1
+  desired_capacity = 1
+
+  web_tg_arn = "${module.web.web_tg_arn}"
+  web_alb_dns = "${module.web.alb_dns_name}"
 }

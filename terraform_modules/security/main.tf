@@ -23,7 +23,7 @@ resource "aws_security_group" "web-lb" {
     to_port = 443
     cidr_blocks = [ "0.0.0.0/0" ]
 
-    description = "Allows all traffic on port 80"
+    description = "Allows all traffic on port 443"
   }
 
   egress {
@@ -37,12 +37,12 @@ resource "aws_security_group" "web-lb" {
 resource "aws_security_group" "web-access" {
   vpc_id = "${var.vpc_id}"
   name_prefix = "public-web-access-"
-  description = "Allows traffic on port 80 from web-lb SG"
+  description = "Allows traffic on all ports coming from web-lb SG"
 
   ingress {
-    from_port = 80
+    from_port = 0
+    to_port = 65535
     protocol = "TCP"
-    to_port = 80
     security_groups = [ "${aws_security_group.web-lb.id}" ]
   }
 

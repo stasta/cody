@@ -40,7 +40,7 @@ resource "aws_autoscaling_group" "asg_web" {
 
   vpc_zone_identifier   = ["${var.subnets_ids}"]
 
-  target_group_arns = [ "${aws_lb_target_group.web-target-group.arn}"]
+//  target_group_arns = [ "${aws_lb_target_group.web-target-group.arn}"]
 
   tags = [
     {
@@ -103,6 +103,8 @@ resource "aws_lb_target_group" "web-target-group" {
   port        = 80
   protocol    = "HTTP"
   vpc_id      = "${var.vpc_id}"
+
+  target_type = "instance"
 
   deregistration_delay = 30
 }
