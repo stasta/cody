@@ -38,10 +38,7 @@ variable "ssh_sg" {
   type = "string"
 }
 
-variable "web_tg_arn" {
-  type = "string"
-}
+variable "alb_name" { default = "web_alb" }
+variable "alb_sg" { type = "string" }
 
-variable "web_alb_dns" {
-  type = "string"
-}
+variable "vpc_id" { type = "string" }

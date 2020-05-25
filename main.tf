@@ -26,7 +26,16 @@ module "security" {
   whitelisted_ssh_ips = [ "50.68.30.198/32" ]
 }
 
-module "web" {
+module "rds" {
+  source = "./terraform_modules/rds"
+
+  vpc_id = "${module.network.vpc}"
+  primary_subnet = "${module.network.primary_public_subnet}"
+  secondary_subnet = "${module.network.secondary_public_subnet}"
+  web_sg = "${module.security.web-sg}"
+}
+
+/*module "web" {
   source = "./terraform_modules/web"
 
   keypair_name="${module.security.keypair_name}"
@@ -40,7 +49,7 @@ module "web" {
 
   lc_web_security_groups = ["${module.security.ssh-sg}", "${module.security.web-sg}"]
   alb_sg = "${module.security.web-lb-sg}"
-}
+}*/
 
 module "efs" {
   source = "./terraform_modules/efs"
@@ -51,19 +60,11 @@ module "efs" {
   web_sg = "${module.security.web-sg}"
 }
 
-module "rds" {
-  source = "./terraform_modules/rds"
-
-  vpc_id = "${module.network.vpc}"
-  primary_subnet = "${module.network.primary_public_subnet}"
-  secondary_subnet = "${module.network.secondary_public_subnet}"
-  web_sg = "${module.security.web-sg}"
-}
 
 module "web-ecs" {
   source = "./terraform_modules/web-ecs"
 
-
+  vpc_id = "${module.network.vpc}"
   primary_subnet = "${module.network.primary_public_subnet}"
   secondary_subnet = "${module.network.secondary_public_subnet}"
   file_system_id ="${module.efs.file_system}"
@@ -77,6 +78,8 @@ module "web-ecs" {
   min_instance_size = 1
   desired_capacity = 1
 
-  web_tg_arn = "${module.web.web_tg_arn}"
-  web_alb_dns = "${module.web.alb_dns_name}"
+//  web_tg_arn = "${module.web.web_tg_arn}"
+//  web_alb_dns = "${module.web.alb_dns_name}"
+
+  alb_sg = "${module.security.web-lb-sg}"
 }

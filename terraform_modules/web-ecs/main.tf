@@ -11,8 +11,10 @@ resource "aws_ecs_service" "bar" {
   load_balancer {
     container_name = "nginx"
     container_port = 80
-    target_group_arn = "${var.web_tg_arn}"
+    target_group_arn = "${aws_lb_target_group.web-target-group.arn}"
   }
+
+  depends_on = ["aws_lb_listener.web-listener-target-group"]
 
 /*  network_configuration {
     subnets = [ "${var.primary_subnet}", "${var.secondary_subnet}" ]
@@ -180,4 +182,49 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   vpc_zone_identifier         = ["${var.primary_subnet}", "${var.secondary_subnet}"]
   launch_configuration        = "${aws_launch_configuration.ecs-launch-configuration.name}"
   health_check_type           = "ELB"
+}
+
+resource "aws_lb" "web_alb" {
+  name_prefix = "web-"
+  internal = false
+  load_balancer_type = "application"
+
+  security_groups = ["${var.alb_sg}"]
+  subnets = ["${var.primary_subnet}", "${var.secondary_subnet}"]
+
+  enable_deletion_protection = false
+
+  // TODO create s3 logs bucket
+  //  access_logs {
+  //    bucket  = "${aws_s3_bucket.web_alb-logs-bucket.bucket}"
+  //    prefix  = "access_logs" // TODO use an application tag?
+  //    enabled = true
+  //  }
+
+  tags = {
+    Name = "${var.alb_name}"
+  }
+}
+
+
+resource "aws_lb_target_group" "web-target-group" {
+  name_prefix = "webtg-"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = "${var.vpc_id}"
+
+  target_type = "instance"
+
+  deregistration_delay = 30
+}
+
+resource "aws_lb_listener" "web-listener-target-group" {
+  load_balancer_arn = "${aws_lb.web_alb.arn}"
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.web-target-group.arn}"
+  }
 }
