@@ -9,7 +9,7 @@ resource "aws_ecs_service" "bar" {
   desired_count   = 1
   launch_type     = "EC2"
   load_balancer {
-    container_name = "nginx"
+    container_name = "wordpress"
     container_port = 80
     target_group_arn = "${aws_lb_target_group.web-target-group.arn}"
   }
@@ -75,19 +75,28 @@ resource "aws_ecs_task_definition" "web-task" {
           }
       ],
       "essential": true,
-      "name": "nginx",
-      "image": "nginx"
+      "name": "wordpress",
+      "image": "wordpress:php7.2",
+  "mountPoints":
+  [
+      {
+          "sourceVolume": "html",
+          "containerPath": "/var/www/html"
+      }
+  ]
   }
 ]
 DEFINITION
 
-//  volume {
-//    name      = "efs-html"
-//    efs_volume_configuration {
-//      file_system_id = "${var.file_system_id}"
-//      root_directory = "/efs"
-//    }
-//  }
+  volume {
+    name      = "html"
+    host_path = "/opt/html"
+
+   /* efs_volume_configuration {
+      file_system_id = "${var.file_system_id}"
+      root_directory = "/efs"
+    }*/
+  }
 }
 
 
