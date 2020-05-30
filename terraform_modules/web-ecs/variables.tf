@@ -42,3 +42,17 @@ variable "alb_name" { default = "web_alb" }
 variable "alb_sg" { type = "string" }
 
 variable "vpc_id" { type = "string" }
+
+
+variable "datadog-api-key" {
+  type = "string"
+  default = ""
+}
+
+variable "datadog-extra-config" {
+  default = "./init"
+}
+
+variable "env" {
+  default = ""
+}

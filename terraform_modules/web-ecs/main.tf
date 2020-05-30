@@ -6,7 +6,7 @@ resource "aws_ecs_service" "bar" {
   name            = "efs-example-service" //TODO
   cluster         = "${aws_ecs_cluster.foo.id}"
   task_definition = "${aws_ecs_task_definition.web-task.arn}" //TODO
-  desired_count   = 1
+  desired_count   = 3
   launch_type     = "EC2"
   load_balancer {
     container_name = "wordpress"
@@ -98,7 +98,6 @@ DEFINITION
     }*/
   }
 }
-
 
 resource "aws_iam_role" "ecs-service-role" {
   name                = "ecs-service-role"
@@ -236,4 +235,14 @@ resource "aws_lb_listener" "web-listener-target-group" {
     type             = "forward"
     target_group_arn = "${aws_lb_target_group.web-target-group.arn}"
   }
+}
+
+module "ecs-datadog" {
+  source = "github.com/riboseinc/terraform-aws-ecs-datadog"
+
+  datadog-api-key = "${var.datadog-api-key}"
+  datadog-extra-config = "${var.datadog-extra-config}"
+  env = "${var.env}"
+  identifier = "datadog"
+  ecs-cluster-id = "${aws_ecs_cluster.foo.id}"
 }
