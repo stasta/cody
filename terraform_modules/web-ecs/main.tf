@@ -246,6 +246,8 @@ resource "aws_lb_listener" "web-listener-target-group" {
   }
 }
 
+// TODO
+// Also check https://www.terraform.io/docs/providers/datadog/r/integration_aws.html
 module "ecs-datadog" {
   source = "github.com/riboseinc/terraform-aws-ecs-datadog"
 
