@@ -11,6 +11,7 @@ resource "aws_vpc" "vpc" {
     Name = "${var.vpc_name}"
   }
 }
+
 // TODO remove
 resource "aws_subnet" "primary_public_subnet" {
   cidr_block              = "${var.subnet_cidr_block["primary_public"]}"
@@ -22,6 +23,7 @@ resource "aws_subnet" "primary_public_subnet" {
     Name = "public-${data.aws_availability_zones.azs.names[0]}"
   }
 }
+
 // TODO remove
 resource "aws_subnet" "secondary_public_subnet" {
   cidr_block              = "${var.subnet_cidr_block["secondary_public"]}"
@@ -73,9 +75,9 @@ resource "aws_route" "public_route" {
 }
 
 resource "aws_route_table_association" "public_subnet_route_table_association" {
-  count = "${length(var.subnets_cidr)}"
+  count          = "${length(var.subnets_cidr)}"
   route_table_id = "${aws_route_table.public_route_table.id}"
-  subnet_id = "${element(aws_subnet.public_subnets.*.id, count.index)}"
+  subnet_id      = "${element(aws_subnet.public_subnets.*.id, count.index)}"
 }
 
 // TODO remove

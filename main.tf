@@ -89,7 +89,7 @@ module "web-ecs" {
   //  web_tg_arn = "${module.web.web_tg_arn}"
   //  web_alb_dns = "${module.web.alb_dns_name}"
 
-  alb_sg = "${module.security.web-lb-sg}"
+  alb_sg          = "${module.security.web-lb-sg}"
   datadog-api-key = "${var.datadog-api-key}"
   env             = "prod"
 }

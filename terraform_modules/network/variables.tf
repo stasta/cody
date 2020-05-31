@@ -27,7 +27,7 @@ variable "subnet_cidr_block" {
 }
 
 variable "subnets_cidr" {
-  type = "list"
+  type        = "list"
   description = "List of subnet's CIDR blocks."
-  default = ["10.0.3.0/24", "10.0.4.0/24"]
+  default     = ["10.0.3.0/24", "10.0.4.0/24"]
 }
