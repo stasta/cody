@@ -1,16 +1,16 @@
-resource "aws_ecs_cluster" "foo" { //TODO refactor its name
-  name = "${var.ecs_cluster_name}"
+resource "aws_ecs_cluster" "foo" {
+  name = "${var.ecs_cluster_name}" //TODO refactor its name
 }
 
 resource "aws_ecs_service" "bar" {
   name            = "efs-example-service"                     //TODO externalize to a variable
-  cluster         = "${aws_ecs_cluster.foo.id}" //TODO refactor its name
+  cluster         = "${aws_ecs_cluster.foo.id}"               //TODO refactor its name
   task_definition = "${aws_ecs_task_definition.web-task.arn}" //TODO externalize to a variable
-  desired_count   = 1 //TODO externalize to a variable
+  desired_count   = 1                                         //TODO externalize to a variable
   launch_type     = "EC2"
 
   load_balancer {
-    container_name   = "wordpress" //TODO externalize to a variable. must be the same as the container definition container name
+    container_name   = "wordpress"                                   //TODO externalize to a variable. must be the same as the container definition container name
     container_port   = 80
     target_group_arn = "${aws_lb_target_group.web-target-group.arn}"
   }
@@ -46,6 +46,7 @@ resource "aws_ecs_task_definition" "web-task" {
   }
 ]
 DEFINITION
+
   volume {
     name = "html"
 
@@ -116,13 +117,13 @@ resource "aws_iam_instance_profile" "ecs-instance-profile" {
 
 resource "aws_launch_configuration" "ecs-launch-configuration" {
   name                 = "ecs-launch-configuration"
-  image_id             = "ami-fad25980" //TODO check AMI
-  instance_type        = "t2.micro" //TODO externalize to a variable
+  image_id             = "ami-fad25980"                                        //TODO check AMI
+  instance_type        = "t2.micro"                                            //TODO externalize to a variable
   iam_instance_profile = "${aws_iam_instance_profile.ecs-instance-profile.id}"
 
   root_block_device {
     volume_type           = "gp2"
-    volume_size           = 10 //TODO externalize to a variable
+    volume_size           = 10    //TODO externalize to a variable
     delete_on_termination = true
   }
 
@@ -218,4 +219,6 @@ module "ecs-datadog" {
 
 // TODO add cloudwatch alerts and triggers
 
+
 // TODO add logs to cloudwatch logs from containers
+

@@ -32,7 +32,7 @@ module "security" {
   source = "./terraform_modules/security"
 
   vpc_id              = "${module.network.vpc}"
-  whitelisted_ssh_ips = ["50.68.30.198/32"] //TODO move it to an external variable. Maybe running a local provisioner to set it?
+  whitelisted_ssh_ips = ["50.68.30.198/32"]     //TODO move it to an external variable. Maybe running a local provisioner to set it?
 }
 
 module "rds" {
@@ -74,7 +74,7 @@ module "web-ecs" {
   subnets        = "${module.network.public_subnets}"
   file_system_id = "${module.efs.file_system}"
 
-  ecs_cluster_name  = "test-cluster"  // TODO refactor it
+  ecs_cluster_name  = "test-cluster"                    // TODO refactor it
   ecs_key_pair_name = "${module.security.keypair_name}"
   web_sg            = "${module.security.web-sg}"
   ssh_sg            = "${module.security.ssh-sg}"
