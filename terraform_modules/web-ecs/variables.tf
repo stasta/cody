@@ -38,14 +38,20 @@ variable "ssh_sg" {
   type = "string"
 }
 
-variable "alb_name" { default = "web_alb" }
-variable "alb_sg" { type = "string" }
+variable "alb_name" {
+  default = "web_alb"
+}
 
-variable "vpc_id" { type = "string" }
+variable "alb_sg" {
+  type = "string"
+}
 
+variable "vpc_id" {
+  type = "string"
+}
 
 variable "datadog-api-key" {
-  type = "string"
+  type    = "string"
   default = ""
 }
 

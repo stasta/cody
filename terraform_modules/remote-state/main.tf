@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "tf-remote-state-bucket" {
   bucket = "${var.account_alias}-terraform-state"
-  acl = "private"
+  acl    = "private"
 }
 
 resource "aws_s3_bucket_public_access_block" "bucket_public_access_block" {

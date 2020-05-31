@@ -31,29 +31,29 @@ resource "aws_launch_configuration" "lc_web" {
 }
 
 resource "aws_autoscaling_group" "asg_web" {
-  name_prefix           =  "${var.asg_web_name_prefix}"
-  launch_configuration  = "${aws_launch_configuration.lc_web.name}"
+  name_prefix          = "${var.asg_web_name_prefix}"
+  launch_configuration = "${aws_launch_configuration.lc_web.name}"
 
-  min_size              = "${var.asg_web_min_size}"
-  max_size              = "${var.asg_web_max_size}"
-  desired_capacity      = "${var.asg_web_des_size}"
+  min_size         = "${var.asg_web_min_size}"
+  max_size         = "${var.asg_web_max_size}"
+  desired_capacity = "${var.asg_web_des_size}"
 
-  vpc_zone_identifier   = ["${var.subnets_ids}"]
+  vpc_zone_identifier = ["${var.subnets_ids}"]
 
-//  target_group_arns = [ "${aws_lb_target_group.web-target-group.arn}"]
+  //  target_group_arns = [ "${aws_lb_target_group.web-target-group.arn}"]
 
   tags = [
     {
       key                 = "Name"
       value               = "${var.asg_web_ec2_tag_name}"
       propagate_at_launch = true
-    }
+    },
   ]
-
   lifecycle {
     create_before_destroy = true
   }
 }
+
 // TODO figure out bucket policy
 /*resource "aws_s3_bucket" "web_alb-logs-bucket" {
   bucket_prefix = "web-alb-access-logs"
@@ -69,7 +69,8 @@ resource "aws_autoscaling_group" "asg_web" {
 “AWS”: “arn:aws:iam::783225319266:root”
 },
 “Action”: “s3:PutObject”,
-“Resource”: “arn:aws:s3:::elb-log.davidwzhang.com*//*”
+“Resource”: “arn:aws:s3:::elb-log.davidwzhang.com*/
+/*”
 }
 ]
 }
@@ -77,21 +78,21 @@ EOF
 }*/
 
 resource "aws_lb" "web_alb" {
-  name_prefix = "web-"
-  internal = false
+  name_prefix        = "web-"
+  internal           = false
   load_balancer_type = "application"
 
   security_groups = ["${var.alb_sg}"]
-  subnets = ["${var.subnets_ids}"]
+  subnets         = ["${var.subnets_ids}"]
 
   enable_deletion_protection = false
 
   // TODO create s3 logs bucket
-//  access_logs {
-//    bucket  = "${aws_s3_bucket.web_alb-logs-bucket.bucket}"
-//    prefix  = "access_logs" // TODO use an application tag?
-//    enabled = true
-//  }
+  //  access_logs {
+  //    bucket  = "${aws_s3_bucket.web_alb-logs-bucket.bucket}"
+  //    prefix  = "access_logs" // TODO use an application tag?
+  //    enabled = true
+  //  }
 
   tags = {
     Name = "${var.alb_name}"

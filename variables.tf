@@ -1,22 +1,22 @@
 variable aws_region {
-  type = "string"
+  type        = "string"
   description = "AWS Region where resources will be deployed"
-  default = "us-east-1"
+  default     = "us-east-1"
 }
 
 variable "app_name" {
-  type = "string"
+  type        = "string"
   description = "The application's name for this workload"
-  default = "app"
+  default     = "wordpress"
 }
 
 variable "env" {
-  type = "string"
+  type        = "string"
   description = "e.g.: dev/stage/prod"
-  default = "dev"
+  default     = "dev"
 }
 
 variable "datadog-api-key" {
-  type = "string"
+  type        = "string"
   description = "The Datadog API key."
 }

@@ -3,20 +3,21 @@ resource "aws_ecs_cluster" "foo" {
 }
 
 resource "aws_ecs_service" "bar" {
-  name            = "efs-example-service" //TODO
+  name            = "efs-example-service"                     //TODO
   cluster         = "${aws_ecs_cluster.foo.id}"
   task_definition = "${aws_ecs_task_definition.web-task.arn}" //TODO
   desired_count   = 3
   launch_type     = "EC2"
+
   load_balancer {
-    container_name = "wordpress"
-    container_port = 80
+    container_name   = "wordpress"
+    container_port   = 80
     target_group_arn = "${aws_lb_target_group.web-target-group.arn}"
   }
 
   depends_on = ["aws_lb_listener.web-listener-target-group"]
 
-/*  network_configuration {
+  /*  network_configuration {
     subnets = [ "${var.primary_subnet}", "${var.secondary_subnet}" ]
   }*/
 }
@@ -60,7 +61,8 @@ resource "aws_ecs_service" "bar" {
 //}
 
 resource "aws_ecs_task_definition" "web-task" {
-  family        = "web-task" //TODO
+  family = "web-task" //TODO
+
   //network_mode = "awsvpc"
 
   container_definitions = <<DEFINITION
@@ -87,12 +89,11 @@ resource "aws_ecs_task_definition" "web-task" {
   }
 ]
 DEFINITION
-
   volume {
     name      = "html"
     host_path = "/opt/html"
 
-   /* efs_volume_configuration {
+    /* efs_volume_configuration {
       file_system_id = "${var.file_system_id}"
       root_directory = "/efs"
     }*/
@@ -100,9 +101,9 @@ DEFINITION
 }
 
 resource "aws_iam_role" "ecs-service-role" {
-  name                = "ecs-service-role"
-  path                = "/"
-  assume_role_policy  = "${data.aws_iam_policy_document.ecs-service-policy.json}"
+  name               = "ecs-service-role"
+  path               = "/"
+  assume_role_policy = "${data.aws_iam_policy_document.ecs-service-policy.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "ecs-service-role-attachment" {
@@ -121,11 +122,10 @@ data "aws_iam_policy_document" "ecs-service-policy" {
   }
 }
 
-
 resource "aws_iam_role" "ecs-instance-role" {
-  name                = "ecs-instance-role"
-  path                = "/"
-  assume_role_policy  = "${data.aws_iam_policy_document.ecs-instance-policy.json}"
+  name               = "ecs-instance-role"
+  path               = "/"
+  assume_role_policy = "${data.aws_iam_policy_document.ecs-instance-policy.json}"
 }
 
 data "aws_iam_policy_document" "ecs-instance-policy" {
@@ -148,22 +148,22 @@ resource "aws_iam_instance_profile" "ecs-instance-profile" {
   name = "ecs-instance-profile"
   path = "/"
   role = "${aws_iam_role.ecs-instance-role.id}"
+
   // TODO what is this?
   /*provisioner "local-exec" {
     command = "sleep 10"
   }*/
 }
 
-
 resource "aws_launch_configuration" "ecs-launch-configuration" {
-  name                        = "ecs-launch-configuration"
-  image_id                    = "ami-fad25980"
-  instance_type               = "t2.micro"
-  iam_instance_profile        = "${aws_iam_instance_profile.ecs-instance-profile.id}"
+  name                 = "ecs-launch-configuration"
+  image_id             = "ami-fad25980"
+  instance_type        = "t2.micro"
+  iam_instance_profile = "${aws_iam_instance_profile.ecs-instance-profile.id}"
 
   root_block_device {
-    volume_type = "gp2"
-    volume_size = 10
+    volume_type           = "gp2"
+    volume_size           = 10
     delete_on_termination = true
   }
 
@@ -174,7 +174,8 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
   security_groups             = ["${var.web_sg}", "${var.ssh_sg}"]
   associate_public_ip_address = "true"
   key_name                    = "${var.ecs_key_pair_name}"
-  user_data                   = <<EOF
+
+  user_data = <<EOF
                                   #!/bin/bash
                                   sudo yum install -y amazon-efs-utils
                                   sudo mkdir /efs
@@ -183,22 +184,22 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
 }
 
 resource "aws_autoscaling_group" "ecs-autoscaling-group" {
-  name                        = "ecs-autoscaling-group"
-  max_size                    = "${var.max_instance_size}"
-  min_size                    = "${var.min_instance_size}"
-  desired_capacity            = "${var.desired_capacity}"
-  vpc_zone_identifier         = ["${var.primary_subnet}", "${var.secondary_subnet}"]
-  launch_configuration        = "${aws_launch_configuration.ecs-launch-configuration.name}"
-  health_check_type           = "ELB"
+  name                 = "ecs-autoscaling-group"
+  max_size             = "${var.max_instance_size}"
+  min_size             = "${var.min_instance_size}"
+  desired_capacity     = "${var.desired_capacity}"
+  vpc_zone_identifier  = ["${var.primary_subnet}", "${var.secondary_subnet}"]
+  launch_configuration = "${aws_launch_configuration.ecs-launch-configuration.name}"
+  health_check_type    = "ELB"
 }
 
 resource "aws_lb" "web_alb" {
-  name_prefix = "web-"
-  internal = false
+  name_prefix        = "web-"
+  internal           = false
   load_balancer_type = "application"
 
   security_groups = ["${var.alb_sg}"]
-  subnets = ["${var.primary_subnet}", "${var.secondary_subnet}"]
+  subnets         = ["${var.primary_subnet}", "${var.secondary_subnet}"]
 
   enable_deletion_protection = false
 
@@ -213,7 +214,6 @@ resource "aws_lb" "web_alb" {
     Name = "${var.alb_name}"
   }
 }
-
 
 resource "aws_lb_target_group" "web-target-group" {
   name_prefix = "webtg-"
@@ -240,9 +240,9 @@ resource "aws_lb_listener" "web-listener-target-group" {
 module "ecs-datadog" {
   source = "github.com/riboseinc/terraform-aws-ecs-datadog"
 
-  datadog-api-key = "${var.datadog-api-key}"
+  datadog-api-key      = "${var.datadog-api-key}"
   datadog-extra-config = "${var.datadog-extra-config}"
-  env = "${var.env}"
-  identifier = "datadog"
-  ecs-cluster-id = "${aws_ecs_cluster.foo.id}"
+  env                  = "${var.env}"
+  identifier           = "datadog"
+  ecs-cluster-id       = "${aws_ecs_cluster.foo.id}"
 }
