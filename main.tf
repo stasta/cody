@@ -32,7 +32,7 @@ module "security" {
   source = "./terraform_modules/security"
 
   vpc_id              = "${module.network.vpc}"
-  whitelisted_ssh_ips = ["50.68.30.198/32"]
+  whitelisted_ssh_ips = ["50.68.30.198/32"] //TODO move it to an external variable. Maybe running a local provisioner to set it?
 }
 
 module "rds" {
@@ -74,7 +74,7 @@ module "web-ecs" {
   subnets        = "${module.network.public_subnets}"
   file_system_id = "${module.efs.file_system}"
 
-  ecs_cluster_name  = "test-cluster"
+  ecs_cluster_name  = "test-cluster"  // TODO refactor it
   ecs_key_pair_name = "${module.security.keypair_name}"
   web_sg            = "${module.security.web-sg}"
   ssh_sg            = "${module.security.ssh-sg}"
@@ -83,8 +83,7 @@ module "web-ecs" {
   min_instance_size = 1
   desired_capacity  = 1
 
-  //  web_tg_arn = "${module.web.web_tg_arn}"
-  //  web_alb_dns = "${module.web.alb_dns_name}"
+  //TODO add the containers service max, min and desired
 
   alb_sg          = "${module.security.web-lb-sg}"
   datadog-api-key = "${var.datadog-api-key}"

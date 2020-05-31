@@ -15,9 +15,10 @@ resource "aws_db_instance" "db_instance" {
   publicly_accessible  = true
 
   vpc_security_group_ids = ["${aws_security_group.db_security_group.id}"]
+  //TODO add backup and maintenance options
 
-  skip_final_snapshot       = true
-  final_snapshot_identifier = "ignore"
+  skip_final_snapshot       = true //TODO
+  final_snapshot_identifier = "ignore" //TODO
 }
 
 resource "aws_db_subnet_group" "db_subnet_group" {

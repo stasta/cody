@@ -20,3 +20,5 @@ resource "aws_security_group" "efs_sg" {
     to_port         = 2049
   }
 }
+
+// TODO add EFS backup solution

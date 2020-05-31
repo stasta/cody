@@ -1,70 +1,27 @@
-resource "aws_ecs_cluster" "foo" {
+resource "aws_ecs_cluster" "foo" { //TODO refactor its name
   name = "${var.ecs_cluster_name}"
 }
 
 resource "aws_ecs_service" "bar" {
-  name            = "efs-example-service"                     //TODO
-  cluster         = "${aws_ecs_cluster.foo.id}"
-  task_definition = "${aws_ecs_task_definition.web-task.arn}" //TODO
-  desired_count   = 1
+  name            = "efs-example-service"                     //TODO externalize to a variable
+  cluster         = "${aws_ecs_cluster.foo.id}" //TODO refactor its name
+  task_definition = "${aws_ecs_task_definition.web-task.arn}" //TODO externalize to a variable
+  desired_count   = 1 //TODO externalize to a variable
   launch_type     = "EC2"
 
   load_balancer {
-    container_name   = "wordpress"
+    container_name   = "wordpress" //TODO externalize to a variable. must be the same as the container definition container name
     container_port   = 80
     target_group_arn = "${aws_lb_target_group.web-target-group.arn}"
   }
 
   depends_on = ["aws_lb_listener.web-listener-target-group"]
-
-  /*  network_configuration {
-    subnets = [ "${var.primary_subnet}", "${var.secondary_subnet}" ]
-  }*/
 }
-
-//TODO
-//resource "aws_ecs_task_definition" "efs-task" {
-//  family        = "efs-example-task" //TODO
-//  network_mode = "awsvpc"
-//
-//  container_definitions = <<DEFINITION
-//[
-//  {
-//      "memory": 128,
-//      "portMappings": [
-//          {
-//              "hostPort": 80,
-//              "containerPort": 80,
-//              "protocol": "tcp"
-//          }
-//      ],
-//      "essential": true,
-//      "mountPoints": [
-//          {
-//              "containerPath": "/usr/share/nginx/html",
-//              "sourceVolume": "efs-html"
-//          }
-//      ],
-//      "name": "nginx",
-//      "image": "nginx"
-//  }
-//]
-//DEFINITION
-//
-//  volume {
-//    name      = "efs-html"
-//    efs_volume_configuration {
-//      file_system_id = "${var.file_system_id}"
-//      root_directory = "/efs"
-//    }
-//  }
-//}
 
 resource "aws_ecs_task_definition" "web-task" {
   family = "web-task" //TODO
 
-  //network_mode = "awsvpc"
-
+  //TODO externalize to a template document. Have the container name, image, version and memory as variables
   container_definitions = <<DEFINITION
 [
   {
@@ -159,13 +116,13 @@ resource "aws_iam_instance_profile" "ecs-instance-profile" {
 
 resource "aws_launch_configuration" "ecs-launch-configuration" {
   name                 = "ecs-launch-configuration"
-  image_id             = "ami-fad25980"
-  instance_type        = "t2.micro"
+  image_id             = "ami-fad25980" //TODO check AMI
+  instance_type        = "t2.micro" //TODO externalize to a variable
   iam_instance_profile = "${aws_iam_instance_profile.ecs-instance-profile.id}"
 
   root_block_device {
     volume_type           = "gp2"
-    volume_size           = 10
+    volume_size           = 10 //TODO externalize to a variable
     delete_on_termination = true
   }
 
@@ -177,6 +134,7 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
   associate_public_ip_address = "true"
   key_name                    = "${var.ecs_key_pair_name}"
 
+  //TODO dont need to mount the /efs dir anymore. Maybe not even installing the efs-utils package
   user_data = <<EOF
                                   #!/bin/bash
                                   sudo yum install -y amazon-efs-utils
@@ -257,3 +215,7 @@ module "ecs-datadog" {
   identifier           = "datadog"
   ecs-cluster-id       = "${aws_ecs_cluster.foo.id}"
 }
+
+// TODO add cloudwatch alerts and triggers
+
+// TODO add logs to cloudwatch logs from containers
