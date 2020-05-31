@@ -188,7 +188,7 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   max_size             = "${var.max_instance_size}"
   min_size             = "${var.min_instance_size}"
   desired_capacity     = "${var.desired_capacity}"
-  vpc_zone_identifier  = ["${var.primary_subnet}", "${var.secondary_subnet}"]
+  vpc_zone_identifier  = ["${var.subnets}"]
   launch_configuration = "${aws_launch_configuration.ecs-launch-configuration.name}"
   health_check_type    = "ELB"
 }
@@ -199,7 +199,7 @@ resource "aws_lb" "web_alb" {
   load_balancer_type = "application"
 
   security_groups = ["${var.alb_sg}"]
-  subnets         = ["${var.primary_subnet}", "${var.secondary_subnet}"]
+  subnets         = ["${var.subnets}"]
 
   enable_deletion_protection = false
 

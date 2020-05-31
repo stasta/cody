@@ -2,12 +2,14 @@ variable "file_system_id" {
   type = "string"
 }
 
-variable "primary_subnet" {
-  type = "string"
+variable "vpc_id" {
+  type        = "string"
+  description = "The VPC where the RDS instance will be created in."
 }
 
-variable "secondary_subnet" {
-  type = "string"
+variable "subnets" {
+  type        = "list"
+  description = "The subnets where the EFS should be available in."
 }
 
 variable "max_instance_size" {
@@ -43,10 +45,6 @@ variable "alb_name" {
 }
 
 variable "alb_sg" {
-  type = "string"
-}
-
-variable "vpc_id" {
   type = "string"
 }
 

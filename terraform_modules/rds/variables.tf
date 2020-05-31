@@ -1,15 +1,14 @@
 variable "vpc_id" {
-  type = "string"
+  type        = "string"
+  description = "The VPC where the RDS instance will be created in."
 }
 
-variable "primary_subnet" {
-  type = "string"
+variable "subnets" {
+  type        = "list"
+  description = "The subnets where the EFS should be available in."
 }
 
-variable "secondary_subnet" {
-  type = "string"
-}
-
-variable "web_sg" {
-  type = "string"
+variable "allowed-sgs" {
+  type        = "string"
+  description = "List of Security Group ID's that have access to the RDS instance"
 }

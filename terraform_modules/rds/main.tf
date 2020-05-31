@@ -21,7 +21,7 @@ resource "aws_db_instance" "db_instance" {
 }
 
 resource "aws_db_subnet_group" "db_subnet_group" {
-  subnet_ids = ["${var.primary_subnet}", "${var.secondary_subnet}"]
+  subnet_ids = ["${var.subnets}"]
 }
 
 resource "aws_security_group" "db_security_group" {
@@ -33,7 +33,7 @@ resource "aws_security_group" "db_security_group" {
     from_port       = 3306
     protocol        = "TCP"
     to_port         = 3306
-    security_groups = ["${var.web_sg}"]
+    security_groups = ["${var.allowed-sgs}"]
   }
 
   egress {

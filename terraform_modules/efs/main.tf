@@ -1,7 +1,7 @@
 resource "aws_efs_file_system" "efs_shared_filesystem" {}
 
 resource "aws_efs_mount_target" "efs_mount_target" {
-  count          = "${length(var.subnets)}"
+  count          = "${length( var.subnets )}"
   file_system_id = "${aws_efs_file_system.efs_shared_filesystem.id}"
   subnet_id      = "${element(var.subnets, count.index)}"
 

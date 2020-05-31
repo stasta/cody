@@ -9,6 +9,6 @@ variable "subnets" {
 }
 
 variable "allowed-sgs" {
-  type = "list"
-  description = "List of Security Group ID's that has access to the EFS file system"
+  type        = "list"
+  description = "List of Security Group ID's that have access to the EFS file system"
 }

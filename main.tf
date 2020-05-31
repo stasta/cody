@@ -38,10 +38,9 @@ module "security" {
 module "rds" {
   source = "./terraform_modules/rds"
 
-  vpc_id           = "${module.network.vpc}"
-  primary_subnet   = "${module.network.primary_public_subnet}"
-  secondary_subnet = "${module.network.secondary_public_subnet}"
-  web_sg           = "${module.security.web-sg}"
+  vpc_id      = "${module.network.vpc}"
+  subnets     = "${module.network.public_subnets}"
+  allowed-sgs = "${module.security.web-sg}"
 }
 
 /*module "web" {
@@ -71,10 +70,9 @@ module "efs" {
 module "web-ecs" {
   source = "./terraform_modules/web-ecs"
 
-  vpc_id           = "${module.network.vpc}"
-  primary_subnet   = "${module.network.primary_public_subnet}"
-  secondary_subnet = "${module.network.secondary_public_subnet}"
-  file_system_id   = "${module.efs.file_system}"
+  vpc_id         = "${module.network.vpc}"
+  subnets        = "${module.network.public_subnets}"
+  file_system_id = "${module.efs.file_system}"
 
   ecs_cluster_name  = "test-cluster"
   ecs_key_pair_name = "${module.security.keypair_name}"
