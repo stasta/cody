@@ -1,15 +1,9 @@
 resource "aws_efs_file_system" "efs_shared_filesystem" {}
 
-resource "aws_efs_mount_target" "efs_mount_target_primary" {
+resource "aws_efs_mount_target" "efs_mount_target" {
+  count          = "${length(var.subnets)}"
   file_system_id = "${aws_efs_file_system.efs_shared_filesystem.id}"
-  subnet_id      = "${var.primary_subnet}"
-
-  security_groups = ["${aws_security_group.efs_sg.id}"]
-}
-
-resource "aws_efs_mount_target" "efs_mount_target_secondary" {
-  file_system_id = "${aws_efs_file_system.efs_shared_filesystem.id}"
-  subnet_id      = "${var.secondary_subnet}"
+  subnet_id      = "${element(var.subnets, count.index)}"
 
   security_groups = ["${aws_security_group.efs_sg.id}"]
 }
