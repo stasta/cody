@@ -90,13 +90,15 @@ resource "aws_ecs_task_definition" "web-task" {
 ]
 DEFINITION
   volume {
-    name      = "html"
-    host_path = "/opt/html"
+    name = "html"
 
-    /* efs_volume_configuration {
+    //    host_path = "/opt/html" //TODO remove
+
+    efs_volume_configuration {
       file_system_id = "${var.file_system_id}"
-      root_directory = "/efs"
-    }*/
+
+      //      root_directory = "/efs" //TODO remove
+    }
   }
 }
 
@@ -222,6 +224,13 @@ resource "aws_lb_target_group" "web-target-group" {
   vpc_id      = "${var.vpc_id}"
 
   target_type = "instance"
+
+  health_check {
+    path                = "/wp-login.php" //TODO move out to a variable
+    healthy_threshold   = "5"
+    unhealthy_threshold = "2"
+    interval            = "10"
+  }
 
   deregistration_delay = 30
 }

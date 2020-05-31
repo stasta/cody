@@ -88,5 +88,5 @@ module "web-ecs" {
 
   alb_sg          = "${module.security.web-lb-sg}"
   datadog-api-key = "${var.datadog-api-key}"
-  env             = "prod"
+  env             = "${var.env}"
 }
