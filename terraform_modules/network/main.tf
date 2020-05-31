@@ -1,7 +1,3 @@
-data "aws_region" "region" {
-  name = "${var.vpc_region}"
-}
-
 data "aws_availability_zones" "azs" {
   all_availability_zones = true
 }

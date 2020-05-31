@@ -25,7 +25,7 @@ terraform {
 module "network" {
   source = "./terraform_modules/network"
 
-  vpc_region = "${var.aws_region}"
+  region = "${var.aws_region}"
 }
 
 module "security" {
