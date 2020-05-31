@@ -6,7 +6,7 @@ resource "aws_ecs_service" "bar" {
   name            = "efs-example-service"                     //TODO
   cluster         = "${aws_ecs_cluster.foo.id}"
   task_definition = "${aws_ecs_task_definition.web-task.arn}" //TODO
-  desired_count   = 3
+  desired_count   = 1
   launch_type     = "EC2"
 
   load_balancer {
