@@ -63,11 +63,9 @@ module "rds" {
 module "efs" {
   source = "./terraform_modules/efs"
 
-  vpc_id           = "${module.network.vpc}"
-  subnets          = "${module.network.public_subnets}"
-  primary_subnet   = "${module.network.primary_public_subnet}"
-  secondary_subnet = "${module.network.secondary_public_subnet}"
-  web_sg           = "${module.security.web-sg}"
+  vpc_id  = "${module.network.vpc}"
+  subnets = "${module.network.public_subnets}"
+  web_sg  = "${module.security.web-sg}"
 }
 
 module "web-ecs" {
