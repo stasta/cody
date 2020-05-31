@@ -16,16 +16,6 @@ variable "vpc_cidr_block" {
   default     = "10.0.0.0/16"
 }
 
-//variable "subnet_cidr_block" {
-//  type        = "map"
-//  description = "List of subnet's CIDR blocks."
-//
-//  default = {
-//    primary_public   = "10.0.1.0/24"
-//    secondary_public = "10.0.2.0/24"
-//  }
-//}
-
 variable "subnets_cidr_block" {
   type        = "list"
   description = "List of subnet's CIDR blocks."
