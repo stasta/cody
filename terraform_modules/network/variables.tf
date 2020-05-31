@@ -25,3 +25,9 @@ variable "subnet_cidr_block" {
     secondary_public = "10.0.2.0/24"
   }
 }
+
+variable "subnets_cidr" {
+  type = "list"
+  description = "List of subnet's CIDR blocks."
+  default = ["10.0.3.0/24", "10.0.4.0/24"]
+}

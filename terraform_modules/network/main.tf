@@ -34,6 +34,22 @@ resource "aws_subnet" "secondary_public_subnet" {
   }
 }
 
+resource "aws_subnet" "public_subnets" {
+  vpc_id = "${aws_vpc.vpc.id}"
+  count  = "${length(var.subnets_cidr)}"
+
+  cidr_block        = "${element( var.subnets_cidr, count.index)}"
+  availability_zone = "${element(data.aws_availability_zones.azs.names, count.index)}"
+
+  tags = {
+    Name = "public-${element(data.aws_availability_zones.azs.names, count.index)}"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "aws_internet_gateway" "igw" {
   vpc_id = "${aws_vpc.vpc.id}"
 
@@ -54,6 +70,12 @@ resource "aws_route" "public_route" {
   route_table_id         = "${aws_route_table.public_route_table.id}"
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = "${aws_internet_gateway.igw.id}"
+}
+
+resource "aws_route_table_association" "public_subnet_route_table_association" {
+  count = "${length(var.subnets_cidr)}"
+  route_table_id = "${aws_route_table.public_route_table.id}"
+  subnet_id = "${element(aws_subnet.public_subnets.*.id, count.index)}"
 }
 
 resource "aws_route_table_association" "primary_public_subnet_route_table_association" {
