@@ -11,10 +11,10 @@ resource "aws_efs_mount_target" "efs_mount_target" {
 resource "aws_security_group" "efs_sg" {
   vpc_id      = "${var.vpc_id}"
   name_prefix = "efs-sg-"
-  description = "Allows EFS access to the Web servers"
+  description = "Allows EFS access"
 
   ingress {
-    security_groups = ["${var.web_sg}"]
+    security_groups = ["${var.allowed-sgs}"]
     from_port       = 2049
     protocol        = "TCP"
     to_port         = 2049

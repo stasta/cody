@@ -8,6 +8,7 @@ variable "subnets" {
   description = "The subnets where the EFS should be available in."
 }
 
-variable "web_sg" {
-  type = "string"
+variable "allowed-sgs" {
+  type = "list"
+  description = "List of Security Group ID's that has access to the EFS file system"
 }
