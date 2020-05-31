@@ -89,3 +89,5 @@ module "web-ecs" {
   datadog-api-key = "${var.datadog-api-key}"
   env             = "${var.env}"
 }
+
+//TODO add cloudfront
