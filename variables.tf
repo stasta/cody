@@ -20,3 +20,9 @@ variable "datadog-api-key" {
   type        = "string"
   description = "The Datadog API key."
 }
+
+variable "whitelisted_ssh_ips" {
+  type = "list"
+  default = ["50.68.30.198/32"]
+  description = "IP's to have SSH access to EC2 instances."
+}

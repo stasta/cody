@@ -32,7 +32,7 @@ module "security" {
   source = "./terraform_modules/security"
 
   vpc_id              = "${module.network.vpc}"
-  whitelisted_ssh_ips = ["50.68.30.198/32"]     //TODO move it to an external variable. Maybe running a local provisioner to set it?
+  whitelisted_ssh_ips = ["${var.whitelisted_ssh_ips}"]
 }
 
 module "rds" {
@@ -79,7 +79,7 @@ module "web-ecs" {
   web_sg            = "${module.security.web-sg}"
   ssh_sg            = "${module.security.ssh-sg}"
 
-  max_instance_size = 1
+  max_instance_size = 3
   min_instance_size = 1
   desired_capacity  = 1
 
