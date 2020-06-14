@@ -24,6 +24,12 @@ variable "des_instance_size" {
   description = "Desired number of instances in the cluster"
 }
 
+variable "des_web_containers" {
+  type = "string"
+  default = 1
+  description = "Desired number of web containers running."
+}
+
 variable "ecs_cluster_name" {
   type = "string"
 }

@@ -6,7 +6,7 @@ resource "aws_ecs_service" "bar" {
   name            = "efs-example-service"                     //TODO externalize to a variable
   cluster         = "${aws_ecs_cluster.foo.id}"               //TODO refactor its name
   task_definition = "${aws_ecs_task_definition.web-task.arn}" //TODO externalize to a variable
-  desired_count   = 1                                         //TODO externalize to a variable
+  desired_count   = "${var.des_web_containers}"
   launch_type     = "EC2"
 
   load_balancer {

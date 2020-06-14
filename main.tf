@@ -83,7 +83,7 @@ module "web-ecs" {
   min_instance_size = 1
   des_instance_size  = 1
 
-  //TODO add the containers service max, min and desired
+  des_web_containers = 2
 
   alb_sg          = "${module.security.web-lb-sg}"
   datadog-api-key = "${var.datadog-api-key}"
