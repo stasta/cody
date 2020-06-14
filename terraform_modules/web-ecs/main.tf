@@ -1,5 +1,9 @@
 resource "aws_ecs_cluster" "foo" {
   name = "${var.ecs_cluster_name}" //TODO refactor its name
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_ecs_service" "bar" {
@@ -16,6 +20,10 @@ resource "aws_ecs_service" "bar" {
   }
 
   depends_on = ["aws_lb_listener.web-listener-target-group"]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_ecs_task_definition" "web-task" {
