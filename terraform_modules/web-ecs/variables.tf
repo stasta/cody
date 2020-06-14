@@ -20,7 +20,7 @@ variable "min_instance_size" {
   description = "Minimum number of instances in the cluster"
 }
 
-variable "desired_capacity" {
+variable "des_instance_size" {
   description = "Desired number of instances in the cluster"
 }
 
