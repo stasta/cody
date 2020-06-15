@@ -74,20 +74,21 @@ module "web-ecs" {
   subnets        = "${module.network.public_subnets}"
   file_system_id = "${module.efs.file_system}"
 
-  ecs_cluster_name  = "test-cluster"                    // TODO refactor it
   ecs_key_pair_name = "${module.security.keypair_name}"
   web_sg            = "${module.security.web-sg}"
   ssh_sg            = "${module.security.ssh-sg}"
 
   max_instance_size = 3
   min_instance_size = 1
-  des_instance_size  = 1
+  des_instance_size = 1
 
   des_web_containers = 2
 
   alb_sg          = "${module.security.web-lb-sg}"
   datadog-api-key = "${var.datadog-api-key}"
   env             = "${var.env}"
+  app             = "${var.app_name}"
 }
 
 //TODO add cloudfront
+

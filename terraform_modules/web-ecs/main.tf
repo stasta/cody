@@ -1,20 +1,20 @@
-resource "aws_ecs_cluster" "foo" {
-  name = "${var.ecs_cluster_name}" //TODO refactor its name
+resource "aws_ecs_cluster" "wordpress-ecs-cluster" {
+  name = "${var.app}-${var.env}-cluster"
 
   lifecycle {
     create_before_destroy = true
   }
 }
 
-resource "aws_ecs_service" "wordpress-ecs-service" {
+resource "aws_ecs_service" "wordpress-ecs-svc" {
   name            = "${var.wordpress-ecs-service}"
-  cluster         = "${aws_ecs_cluster.foo.id}"               //TODO refactor its name
-  task_definition = "${aws_ecs_task_definition.wordpress-task-definition.arn}"
+  cluster         = "${aws_ecs_cluster.wordpress-ecs-cluster.id}"
+  task_definition = "${aws_ecs_task_definition.wordpress-ecs-taskdef.arn}"
   desired_count   = "${var.des_web_containers}"
   launch_type     = "EC2"
 
   load_balancer {
-    container_name   = "wordpress"                                   //TODO externalize to a variable. must be the same as the container definition container name
+    container_name   = "wordpress-${var.app}-${var.env}"
     container_port   = 80
     target_group_arn = "${aws_lb_target_group.web-target-group.arn}"
   }
@@ -26,8 +26,8 @@ resource "aws_ecs_service" "wordpress-ecs-service" {
   }
 }
 
-resource "aws_ecs_task_definition" "wordpress-task-definition" {
-  family = "wordpress-task"
+resource "aws_ecs_task_definition" "wordpress-ecs-taskdef" {
+  family = "${var.app}-${var.env}-wordpress-task"
 
   //TODO externalize to a template document. Have the container name, image, version and memory as variables
   container_definitions = <<DEFINITION
@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "wordpress-task-definition" {
           }
       ],
       "essential": true,
-      "name": "wordpress",
+      "name": "wordpress-${var.app}-${var.env}",
       "image": "wordpress:php7.2",
   "mountPoints":
   [
@@ -57,13 +57,8 @@ DEFINITION
 
   volume {
     name = "html"
-
-    //    host_path = "/opt/html" //TODO remove
-
     efs_volume_configuration {
       file_system_id = "${var.file_system_id}"
-
-      //      root_directory = "/efs" //TODO remove
     }
   }
 
@@ -73,14 +68,14 @@ DEFINITION
 }
 
 resource "aws_launch_configuration" "ecs-launch-configuration" {
-  name                 = "ecs-launch-configuration"
+  name_prefix          = "ecs-launch-configuration"
   image_id             = "ami-fad25980"                                        //TODO check AMI
-  instance_type        = "t2.micro"                                            //TODO externalize to a variable
+  instance_type        = "${var.ecs_aslc_instance_type}"
   iam_instance_profile = "${aws_iam_instance_profile.ecs-instance-profile.id}"
 
   root_block_device {
     volume_type           = "gp2"
-    volume_size           = 10    //TODO externalize to a variable
+    volume_size           = "${var.ecs_aslc_ebs_size}"
     delete_on_termination = true
   }
 
@@ -96,8 +91,8 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
   user_data = <<EOF
                                   #!/bin/bash
                                   sudo yum install -y amazon-efs-utils
-                                  sudo mkdir /efs
-                                  echo ECS_CLUSTER=${var.ecs_cluster_name} >> /etc/ecs/ecs.config
+                                  # sudo mkdir /efs
+                                  echo ECS_CLUSTER=${aws_ecs_cluster.wordpress-ecs-cluster.name} >> /etc/ecs/ecs.config
                                   EOF
 }
 
@@ -171,7 +166,7 @@ module "ecs-datadog" {
   datadog-extra-config = "${var.datadog-extra-config}"
   env                  = "${var.env}"
   identifier           = "datadog"
-  ecs-cluster-id       = "${aws_ecs_cluster.foo.id}"
+  ecs-cluster-id       = "${aws_ecs_cluster.wordpress-ecs-cluster.id}"
 }
 
 // TODO add cloudwatch alerts and triggers

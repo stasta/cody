@@ -7,7 +7,6 @@ variable aws_region {
 variable "app_name" {
   type        = "string"
   description = "The application's name for this workload."
-  default     = "wordpress"
 }
 
 variable "env" {
