@@ -87,11 +87,9 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
   associate_public_ip_address = "true"
   key_name                    = "${var.ecs_key_pair_name}"
 
-  //TODO dont need to mount the /efs dir anymore. Maybe not even installing the efs-utils package
   user_data = <<EOF
                                   #!/bin/bash
                                   sudo yum install -y amazon-efs-utils
-                                  # sudo mkdir /efs
                                   echo ECS_CLUSTER=${aws_ecs_cluster.wordpress-ecs-cluster.name} >> /etc/ecs/ecs.config
                                   EOF
 }
