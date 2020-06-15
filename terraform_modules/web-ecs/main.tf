@@ -27,7 +27,7 @@ resource "aws_ecs_service" "wordpress-ecs-service" {
 }
 
 resource "aws_ecs_task_definition" "wordpress-task-definition" {
-  family = "web-task" //TODO
+  family = "wordpress-task"
 
   //TODO externalize to a template document. Have the container name, image, version and memory as variables
   container_definitions = <<DEFINITION
@@ -65,6 +65,10 @@ DEFINITION
 
       //      root_directory = "/efs" //TODO remove
     }
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
