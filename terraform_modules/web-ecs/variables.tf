@@ -34,6 +34,12 @@ variable "ecs_cluster_name" {
   type = "string"
 }
 
+variable "wordpress-ecs-service" {
+  type = "string"
+  default = "wordpress-ecs-service"
+  description = "The Wordpress ECS service's name."
+}
+
 variable "ecs_key_pair_name" {
   type = "string"
 }

@@ -6,8 +6,8 @@ resource "aws_ecs_cluster" "foo" {
   }
 }
 
-resource "aws_ecs_service" "bar" {
-  name            = "efs-example-service"                     //TODO externalize to a variable
+resource "aws_ecs_service" "wordpress-ecs-service" {
+  name            = "${var.wordpress-ecs-service}"
   cluster         = "${aws_ecs_cluster.foo.id}"               //TODO refactor its name
   task_definition = "${aws_ecs_task_definition.web-task.arn}" //TODO externalize to a variable
   desired_count   = "${var.des_web_containers}"
