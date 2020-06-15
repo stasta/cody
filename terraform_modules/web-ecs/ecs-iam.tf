@@ -47,8 +47,7 @@ resource "aws_iam_instance_profile" "ecs-instance-profile" {
   path = "/"
   role = "${aws_iam_role.ecs-instance-role.id}"
 
-  // TODO what is this?
-  /*provisioner "local-exec" {
+  provisioner "local-exec" {
     command = "sleep 10"
-  }*/
+  }
 }
