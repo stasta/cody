@@ -9,7 +9,7 @@ resource "aws_ecs_cluster" "foo" {
 resource "aws_ecs_service" "wordpress-ecs-service" {
   name            = "${var.wordpress-ecs-service}"
   cluster         = "${aws_ecs_cluster.foo.id}"               //TODO refactor its name
-  task_definition = "${aws_ecs_task_definition.web-task.arn}" //TODO externalize to a variable
+  task_definition = "${aws_ecs_task_definition.wordpress-task-definition.arn}"
   desired_count   = "${var.des_web_containers}"
   launch_type     = "EC2"
 
@@ -26,7 +26,7 @@ resource "aws_ecs_service" "wordpress-ecs-service" {
   }
 }
 
-resource "aws_ecs_task_definition" "web-task" {
+resource "aws_ecs_task_definition" "wordpress-task-definition" {
   family = "web-task" //TODO
 
   //TODO externalize to a template document. Have the container name, image, version and memory as variables
