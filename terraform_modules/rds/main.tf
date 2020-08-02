@@ -38,17 +38,21 @@ resource "aws_security_group" "db_security_group" {
     security_groups = ["${var.allowed-sgs}"]
   }
 
-  ingress {
-    from_port       = 3306
-    protocol        = "TCP"
-    to_port         = 3306
-    cidr_blocks = [ "${var.whitelisted_ips}"]
-  }
-
   egress {
     from_port   = 3306
     protocol    = "TCP"
     to_port     = 3306
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_security_group_rule" "db_security_group_whitelisted_ips" {
+  from_port = 3306
+  protocol = "TCP"
+  security_group_id = "${aws_security_group.db_security_group.id}"
+  to_port = 3306
+  type = "ingress"
+
+  count = "${length(var.whitelisted_ips) > 0 ? 1 : 0}"
+  cidr_blocks = [ "${var.whitelisted_ips}"]
 }

@@ -16,5 +16,6 @@ variable "allowed-sgs" {
 variable "whitelisted_ips" {
   description = "List of whitelisted CIDR ranged IPs that have access to the RDS DB."
   type = "list"
-  default = [ "50.68.30.198/32", "0.0.0.0/0" ]
+  //default = [ "50.68.30.198/32", "0.0.0.0/0" ]
+  default = [  ]
 }
