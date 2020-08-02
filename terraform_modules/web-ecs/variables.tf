@@ -1,12 +1,12 @@
 variable "ecs_aslc_ebs_size" {
-  type = "string"
-  default = "10"
+  type        = "string"
+  default     = "10"
   description = "The EBS size (GB) of the EC2 running in ECS cluster."
 }
 
 variable "ecs_aslc_instance_type" {
-  type = "string"
-  default = "t2.micro"
+  type        = "string"
+  default     = "t2.micro"
   description = "The instance type of the EC2 running in ECS cluster."
 }
 
@@ -37,14 +37,14 @@ variable "des_instance_size" {
 }
 
 variable "des_web_containers" {
-  type = "string"
-  default = 1
+  type        = "string"
+  default     = 1
   description = "Desired number of web containers running."
 }
 
 variable "wordpress-ecs-service" {
-  type = "string"
-  default = "wordpress-ecs-service"
+  type        = "string"
+  default     = "wordpress-ecs-service"
   description = "The Wordpress ECS service's name."
 }
 
@@ -78,13 +78,13 @@ variable "datadog-extra-config" {
 }
 
 variable "env" {
-  type = "string"
-  default = ""
+  type        = "string"
+  default     = ""
   description = "The environment of this workload (e.g.: dev/staging/prod)"
 }
 
 variable "app" {
-  type = "string"
-  default = ""
+  type        = "string"
+  default     = ""
   description = "The application's name."
 }

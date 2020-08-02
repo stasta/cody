@@ -47,12 +47,12 @@ resource "aws_security_group" "db_security_group" {
 }
 
 resource "aws_security_group_rule" "db_security_group_whitelisted_ips" {
-  from_port = 3306
-  protocol = "TCP"
+  from_port         = 3306
+  protocol          = "TCP"
   security_group_id = "${aws_security_group.db_security_group.id}"
-  to_port = 3306
-  type = "ingress"
+  to_port           = 3306
+  type              = "ingress"
 
-  count = "${length(var.whitelisted_ips) > 0 ? 1 : 0}"
-  cidr_blocks = [ "${var.whitelisted_ips}"]
+  count       = "${length(var.whitelisted_ips) > 0 ? 1 : 0}"
+  cidr_blocks = ["${var.whitelisted_ips}"]
 }
