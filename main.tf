@@ -91,5 +91,11 @@ module "web-ecs" {
   app             = "${var.app_name}"
 }
 
+module "backup" {
+  source = "./terraform_modules/backup"
+
+  vault_name = ""
+}
+
 //TODO add cloudfront
 
