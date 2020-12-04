@@ -122,3 +122,5 @@ override.tf.json
 # example: *tfplan*
 
 # End of https://www.gitignore.io/api/intellij,terraform
+
+.idea/aws.xml
