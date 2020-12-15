@@ -23,7 +23,7 @@ resource "aws_db_instance" "db_instance" {
 }
 
 resource "aws_db_subnet_group" "db_subnet_group" {
-  subnet_ids = ["${var.subnets}"]
+  subnet_ids = "${var.subnets}"
 }
 
 resource "aws_security_group" "db_security_group" {
@@ -54,5 +54,5 @@ resource "aws_security_group_rule" "db_security_group_whitelisted_ips" {
   type              = "ingress"
 
   count       = "${length(var.whitelisted_ips) > 0 ? 1 : 0}"
-  cidr_blocks = ["${var.whitelisted_ips}"]
+  cidr_blocks = "${var.whitelisted_ips}"
 }

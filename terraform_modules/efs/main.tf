@@ -14,7 +14,7 @@ resource "aws_security_group" "efs_sg" {
   description = "Allows EFS access"
 
   ingress {
-    security_groups = ["${var.allowed-sgs}"]
+    security_groups = "${var.allowed-sgs}"
     from_port       = 2049
     protocol        = "TCP"
     to_port         = 2049
