@@ -87,6 +87,8 @@ fabric.properties
 # SonarQube Plugin
 .idea/**/sonarIssues.xml
 
+.idea/aws.xml
+
 # Markdown Navigator plugin
 .idea/**/markdown-navigator.xml
 .idea/**/markdown-navigator/
