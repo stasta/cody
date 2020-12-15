@@ -126,3 +126,4 @@ override.tf.json
 # End of https://www.gitignore.io/api/intellij,terraform
 
 .idea/aws.xml
+.idea/misc.xml
