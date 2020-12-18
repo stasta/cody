@@ -23,7 +23,7 @@ resource "aws_db_instance" "db_instance" {
 }
 
 resource "aws_db_subnet_group" "db_subnet_group" {
-  subnet_ids = "${var.subnets}"
+  subnet_ids = flatten([var.subnets])
 }
 
 resource "aws_security_group" "db_security_group" {

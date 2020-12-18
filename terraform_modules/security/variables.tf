@@ -13,5 +13,5 @@ variable "keypair_path" {
 
 variable "keypair_public_key_file" {
   type    = "string"
-  default = "/Users/gustavofernandes/.ssh/cody_rsa.pub" //TODO
+  default = "/Users/gustavo/.ssh/cody_rsa.pub" //TODO
 }

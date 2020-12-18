@@ -100,7 +100,7 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   max_size             = "${var.max_instance_size}"
   min_size             = "${var.min_instance_size}"
   desired_capacity     = "${var.des_instance_size}"
-  vpc_zone_identifier  = "${var.subnets}"
+  vpc_zone_identifier  = flatten([var.subnets])
   launch_configuration = "${aws_launch_configuration.ecs-launch-configuration.name}"
   health_check_type    = "ELB"
 }
@@ -111,7 +111,7 @@ resource "aws_lb" "web_alb" {
   load_balancer_type = "application"
 
   security_groups = ["${var.alb_sg}"]
-  subnets         = "${var.subnets}"
+  subnets         = flatten([var.subnets])
 
   enable_deletion_protection = false
 
@@ -158,15 +158,24 @@ resource "aws_lb_listener" "web-listener-target-group" {
 
 // TODO
 // Also check https://www.terraform.io/docs/providers/datadog/r/integration_aws.html
-module "ecs-datadog" {
-  source = "github.com/riboseinc/terraform-aws-ecs-datadog"
+//module "ecs-datadog" {
+//  source = "github.com/riboseinc/terraform-aws-ecs-datadog"
+//
+//  datadog-api-key      = "${var.datadog-api-key}"
+//  datadog-extra-config = "${var.datadog-extra-config}"
+//  env                  = "${var.env}"
+//  identifier           = "datadog"
+//  ecs-cluster-id       = "${aws_ecs_cluster.wordpress-ecs-cluster.id}"
+//}
 
-  datadog-api-key      = "${var.datadog-api-key}"
-  datadog-extra-config = "${var.datadog-extra-config}"
-  env                  = "${var.env}"
-  identifier           = "datadog"
-  ecs-cluster-id       = "${aws_ecs_cluster.wordpress-ecs-cluster.id}"
-}
+//module "ecs-datadog-agent" {
+//  source  = "hazelops/ecs-datadog-agent/aws"
+//  version = "1.0.4"
+//
+//  app_name = var.app
+//  ecs_launch_type = "ecs"
+//  env = var.env
+//}
 
 // TODO add cloudwatch alerts and triggers
 

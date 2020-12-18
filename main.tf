@@ -32,14 +32,14 @@ module "security" {
   source = "./terraform_modules/security"
 
   vpc_id              = "${module.network.vpc}"
-  whitelisted_ssh_ips = ["${var.whitelisted_ssh_ips}"]
+  whitelisted_ssh_ips = "${var.whitelisted_ssh_ips}"
 }
 
 module "rds" {
   source = "./terraform_modules/rds"
 
   vpc_id          = "${module.network.vpc}"
-  subnets         = "${module.network.public_subnets}"
+  subnets         = module.network.public_subnets
   allowed-sgs     = "${module.security.web-sg}"
   whitelisted_ips = ["50.68.30.198/32", "0.0.0.0/0"]
 }
